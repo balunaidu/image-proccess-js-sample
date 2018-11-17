@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Draw a rectangle!</title>
+</head>
+
+<body onload="init();">
+<canvas id="canvas" width="500" height="500"></canvas>
+<script type="text/javascript">
+	var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var rect = {};
+var rectangles = [];
+var drag = false;
+var imageObj = null;
+
+function init() {
+    imageObj = new Image();
+    imageObj.onload = function () { ctx.drawImage(imageObj, 0, 0); };
+    imageObj.src = 'http://2.bp.blogspot.com/-H2mxW70fR6Q/VZs99oLaKgI/AAAAAAAAABk/4Nupoi5ZFBs/s1600/Ram_Gopal%2B_Varma_Movie_Collections.jpg';
+    canvas.addEventListener('mousedown', mouseDown, false);
+    canvas.addEventListener('mouseup', mouseUp, false);
+    canvas.addEventListener('mousemove', mouseMove, false);
+}
+
+function mouseDown(e) {
+    rect.startX = e.pageX - this.offsetLeft;
+    rect.startY = e.pageY - this.offsetTop;
+drawRectangles();
+    drag = true;
+}
+
+function mouseUp() { 
+	if(rect.w){
+		rectangles.push(rect);
+	}
+console.log(rectangles);
+rect = {};
+drawRectangles();
+	drag = false; 
+}
+
+function drawRectangles() {
+if(rectangles.length>0){
+for(var i=0;i<rectangles.length;i++){
+	ctx.strokeRect(rectangles[i].startX, rectangles[i].startY, rectangles[i].w, rectangles[i].h);
+}
+	}
+
+}
+
+function mouseMove(e) {
+    if (drag) {
+        ctx.clearRect(0, 0, 500, 500);
+        ctx.drawImage(imageObj, 0, 0);
+        rect.w = (e.pageX - this.offsetLeft) - rect.startX;
+        rect.h = (e.pageY - this.offsetTop) - rect.startY;
+        ctx.strokeStyle = 'red';
+        ctx.strokeRect(rect.startX, rect.startY, rect.w, rect.h);
+drawRectangles();
+    }
+}
+//
+init();
+
+
+</script>
+</body>
+
+</html>
